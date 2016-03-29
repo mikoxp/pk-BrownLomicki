@@ -5,13 +5,31 @@
  */
 package brownlomicki;
 
+import java.util.List;
+
 /**
  *
  * @author miko
  */
 public class Wyrob {
+
     int numer;
+    
     double[] czasyNaMaszynach;
+    List<Okres> czasyPracy;
+
+    public List<Okres> getCzasyPracy() {
+        return czasyPracy;
+    }
+
+    public void setCzasyPracy(List<Okres> czasyPracy) {
+        this.czasyPracy = czasyPracy;
+    }
+
+    public Wyrob(int numer, double[] czasyNaMaszynach) {
+        this.numer = numer;
+        this.czasyNaMaszynach = czasyNaMaszynach;
+    }
 
     public int getNumer() {
         return numer;
@@ -29,9 +47,6 @@ public class Wyrob {
         this.czasyNaMaszynach = czasyNaMaszynach;
     }
 
-    public Wyrob(int numer, double[] czasyNaMaszynach) {
-        this.numer = numer;
-        this.czasyNaMaszynach = czasyNaMaszynach;
-    }
+
     
 }
