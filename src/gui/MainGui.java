@@ -5,6 +5,9 @@
  */
 package gui;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -13,20 +16,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainGui extends javax.swing.JFrame {
 
-    private int numberOfTableColumn=3;
-    private int numberOfTableRows=4;
+    private int numberOfTableColumn = 3;
+    private int numberOfTableRows = 4;
     private final DefaultTableModel tableModel;
+    private List<String> titleList;
+
     public MainGui() {
         initComponents();
-        tableModel=(DefaultTableModel)dataTable.getModel();
+        tableModel = (DefaultTableModel) dataTable.getModel();
         tableModel.setColumnCount(numberOfTableColumn);
         tableModel.setRowCount(numberOfTableRows);
-        String [] title=new String[3];
-        title[0]="1";
-        title[1]="2";
-        title[2]="3";
-        tableModel.setColumnIdentifiers(title);
+        initTitleList();
         fillTable();
+        fillTitleBox();
     }
 
     /**
@@ -46,9 +48,12 @@ public class MainGui extends javax.swing.JFrame {
         dataTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        textField = new javax.swing.JTextArea();
+        logField = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         clearButton = new javax.swing.JButton();
+        titleBox = new javax.swing.JComboBox<>();
+        textTitle = new javax.swing.JTextField();
+        changeTitle = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -104,10 +109,10 @@ public class MainGui extends javax.swing.JFrame {
             }
         });
 
-        textField.setEditable(false);
-        textField.setColumns(20);
-        textField.setRows(5);
-        jScrollPane1.setViewportView(textField);
+        logField.setEditable(false);
+        logField.setColumns(20);
+        logField.setRows(5);
+        jScrollPane1.setViewportView(logField);
 
         jLabel1.setText("Always OK!!!!!!");
 
@@ -115,6 +120,19 @@ public class MainGui extends javax.swing.JFrame {
         clearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearButtonActionPerformed(evt);
+            }
+        });
+
+        titleBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                titleBoxActionPerformed(evt);
+            }
+        });
+
+        changeTitle.setText("Change");
+        changeTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeTitleActionPerformed(evt);
             }
         });
 
@@ -127,10 +145,17 @@ public class MainGui extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addGap(2, 2, 2))
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(titleBox, 0, 15, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(textTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(changeTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addGap(2, 2, 2)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,8 +195,18 @@ public class MainGui extends javax.swing.JFrame {
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(titleBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(textTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(changeTitle))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clearButton)
@@ -181,44 +216,57 @@ public class MainGui extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void fillTable(){
-        for(int i=0;i<numberOfTableColumn;i++){
-            for(int j=0;j<numberOfTableRows;j++){
+    private void initTitleList(){
+        titleList = new ArrayList<>();
+        titleList.add("1");
+        titleList.add("2");
+        titleList.add("3");
+        tableModel.setColumnIdentifiers(titleList.toArray());
+    }
+    private void fillTitleBox(){
+        titleBox.removeAllItems();
+        for(String s:titleList){
+            titleBox.addItem(s);
+        }
+    }
+    private void fillTable() {
+        for (int i = 0; i < numberOfTableColumn; i++) {
+            for (int j = 0; j < numberOfTableRows; j++) {
                 tableModel.setValueAt(0, j, i);
             }
         }
-       
+
     }
     private void addProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductActionPerformed
         numberOfTableColumn++;
         tableModel.setColumnCount(numberOfTableColumn);
-        String[] titles=new String[numberOfTableColumn];
-        for(int i=1;i<=numberOfTableColumn;i++){
-            titles[i-1]=""+i;
-        }
-        tableModel.setColumnIdentifiers(titles);
+        titleList.add(titleList.size() + 1 + "");
+        tableModel.setColumnIdentifiers(titleList.toArray());
         fillTable();
+        fillTitleBox();
     }//GEN-LAST:event_addProductActionPerformed
 
     private void addMachineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMachineActionPerformed
-       numberOfTableRows++;
-       tableModel.setRowCount(numberOfTableRows);
-       fillTable();
+        numberOfTableRows++;
+        tableModel.setRowCount(numberOfTableRows);
+        fillTable();
     }//GEN-LAST:event_addMachineActionPerformed
 
     private void removeProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeProductActionPerformed
-       if(numberOfTableColumn>1){
-           numberOfTableColumn--;
-         tableModel.setColumnCount(numberOfTableColumn);  
-       }
+        if (numberOfTableColumn > 1) {
+            numberOfTableColumn--;
+            tableModel.setColumnCount(numberOfTableColumn);
+            titleList.remove(titleList.size() - 1);
+            fillTitleBox();
+        }
+
     }//GEN-LAST:event_removeProductActionPerformed
 
     private void removeMachineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeMachineActionPerformed
-       if(numberOfTableRows>1){
-           numberOfTableRows--;
-           tableModel.setRowCount(numberOfTableRows);
-       }
+        if (numberOfTableRows > 1) {
+            numberOfTableRows--;
+            tableModel.setRowCount(numberOfTableRows);
+        }
     }//GEN-LAST:event_removeMachineActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -228,6 +276,20 @@ public class MainGui extends javax.swing.JFrame {
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void titleBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_titleBoxActionPerformed
+
+    private void changeTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeTitleActionPerformed
+        String title=textTitle.getText();
+        textTitle.setText("");
+        int index=titleBox.getSelectedIndex();
+        titleList.remove(index);
+        titleList.add(index, title);
+        tableModel.setColumnIdentifiers(titleList.toArray());
+        fillTitleBox();
+    }//GEN-LAST:event_changeTitleActionPerformed
 
     /**
      * @param args the command line arguments
@@ -267,14 +329,17 @@ public class MainGui extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addMachine;
     private javax.swing.JButton addProduct;
+    private javax.swing.JButton changeTitle;
     private javax.swing.JButton clearButton;
     private javax.swing.JTable dataTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea logField;
     private javax.swing.JButton removeMachine;
     private javax.swing.JButton removeProduct;
-    private javax.swing.JTextArea textField;
+    private javax.swing.JTextField textTitle;
+    private javax.swing.JComboBox<String> titleBox;
     // End of variables declaration//GEN-END:variables
 }
