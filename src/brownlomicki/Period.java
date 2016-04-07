@@ -9,11 +9,11 @@ package brownlomicki;
  *
  * @author user
  */
-public class Okres {
+public class Period {
     double start;
     double end;
 
-    public Okres(double start, double end) {
+    public Period(double start, double end) {
         this.start = start;
         this.end = end;
     }

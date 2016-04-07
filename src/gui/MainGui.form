@@ -3,7 +3,6 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="alwaysOnTop" type="boolean" value="true"/>
     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
       <Color id="Default Cursor"/>
     </Property>
@@ -42,11 +41,11 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="titleBox" pref="15" max="32767" attributes="0"/>
+                                      <Component id="titleBox" pref="0" max="32767" attributes="0"/>
                                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                      <Component id="textTitle" pref="123" max="32767" attributes="0"/>
+                                      <Component id="textTitle" max="32767" attributes="0"/>
                                       <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                                      <Component id="changeTitle" pref="141" max="32767" attributes="0"/>
+                                      <Component id="changeTitle" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
                               </Group>
@@ -66,6 +65,10 @@
                           <Component id="removeMachine" pref="129" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="openFile" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -110,18 +113,19 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="jScrollPane2" pref="203" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Group type="102" alignment="3" attributes="0">
+                      <Component id="jScrollPane2" pref="173" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="openFile" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="changeTitle" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
                               <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
-                              <Component id="titleBox" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="titleBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="textTitle" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <Group type="102" alignment="3" attributes="0">
-                              <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
-                              <Component id="textTitle" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="changeTitle" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -215,7 +219,7 @@
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Always OK!!!!!!"/>
+        <Property name="text" type="java.lang.String" value="Create  by Micha&#x142; Ole&#x15b;   PK 2016"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="clearButton">
@@ -242,6 +246,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeTitleActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="openFile">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Open From File"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="openFileActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

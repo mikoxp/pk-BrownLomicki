@@ -11,41 +11,45 @@ import java.util.List;
  *
  * @author miko
  */
-public class Wyrob {
+public class Product {
 
-    int numer;
+    int number;
     
-    double[] czasyNaMaszynach;
-    List<Okres> czasyPracy;
+    double[] timeInMachines;
+    List<Period> periodWorks;
 
-    public List<Okres> getCzasyPracy() {
-        return czasyPracy;
+    public int getNumber() {
+        return number;
     }
 
-    public void setCzasyPracy(List<Okres> czasyPracy) {
-        this.czasyPracy = czasyPracy;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
-    public Wyrob(int numer, double[] czasyNaMaszynach) {
-        this.numer = numer;
-        this.czasyNaMaszynach = czasyNaMaszynach;
+    public double[] getTimeInMachines() {
+        return timeInMachines;
     }
 
-    public int getNumer() {
-        return numer;
+    public void setTimeInMachines(double[] timeInMachines) {
+        this.timeInMachines = timeInMachines;
     }
 
-    public void setNumer(int numer) {
-        this.numer = numer;
+    public List<Period> getPeriodWorks() {
+        return periodWorks;
     }
 
-    public double[] getCzasyNaMaszynach() {
-        return czasyNaMaszynach;
+    public void setPeriodWorks(List<Period> periodWorks) {
+        this.periodWorks = periodWorks;
     }
 
-    public void setCzasyNaMaszynach(double[] czasyNaMaszynach) {
-        this.czasyNaMaszynach = czasyNaMaszynach;
+    public Product(int number, double[] timeInMachines) {
+        this.number = number;
+        this.timeInMachines = timeInMachines;
     }
+
+   
+
+   
 
 
     
