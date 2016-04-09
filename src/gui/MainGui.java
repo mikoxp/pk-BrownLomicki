@@ -28,6 +28,7 @@ public class MainGui extends javax.swing.JFrame {
         initComponents();
         logText = "";
         tableModel = (DefaultTableModel) dataTable.getModel();
+        //dataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tableModel.setColumnCount(numberOfTableColumn);
         tableModel.setRowCount(numberOfTableRows);
         initTitleList();
@@ -311,11 +312,18 @@ public class MainGui extends javax.swing.JFrame {
     private void loadingData(File file) {
         int c, r;
         List<Integer> listOfData = new ArrayList<>();
+        List<String> title=new ArrayList<>();
         try {
             Scanner in = new Scanner(file);
             in.hasNext();
             c = in.nextInt();
             r = in.nextInt();
+            if(in.nextInt()==1){
+                in.nextLine();
+                for(int i=0;i<c;i++){
+                    title.add(in.nextLine());
+                }
+            }
             while (in.hasNext()) {
                 listOfData.add(in.nextInt());
             }
@@ -332,6 +340,8 @@ public class MainGui extends javax.swing.JFrame {
                     listOfData.remove(0);
                 }
             }
+            titleList=title;
+            tableModel.setColumnIdentifiers(titleList.toArray());
             logText += "Load Success\n";
         } catch (Exception e) {
             logText += "Load failed\n";
