@@ -13,24 +13,32 @@ import java.util.List;
  */
 public class Product {
 
-    int number;
-    
-    double[] timeInMachines;
-    List<Period> periodWorks;
+    private final String idName;
+    private final int number;
+    private int[] timeInMachines;
+    private List<Period> periodWorks;
+
+    public Product(int number, int[] timeInMachines) {
+        this.number = number;
+        this.timeInMachines = timeInMachines;
+        this.idName="";
+    }
+
+    public Product(String idName, int number, int[] timeInMachines) {
+        this.idName = idName;
+        this.number = number;
+        this.timeInMachines = timeInMachines;
+    }
 
     public int getNumber() {
         return number;
     }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public double[] getTimeInMachines() {
+    
+    public int[] getTimeInMachines() {
         return timeInMachines;
     }
 
-    public void setTimeInMachines(double[] timeInMachines) {
+    public void setTimeInMachines(int[] timeInMachines) {
         this.timeInMachines = timeInMachines;
     }
 
@@ -42,15 +50,4 @@ public class Product {
         this.periodWorks = periodWorks;
     }
 
-    public Product(int number, double[] timeInMachines) {
-        this.number = number;
-        this.timeInMachines = timeInMachines;
-    }
-
-   
-
-   
-
-
-    
 }

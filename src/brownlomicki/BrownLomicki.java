@@ -20,7 +20,7 @@ public class BrownLomicki {
     private final int numberOfProduct;
     private final List<Product> productList;
 
-    private double[] precedingCostTime; //poprzedzajacy
+    private int[] precedingCostTime; //poprzedzajacy
     private final List<Product> optimalOrder;
 
     /**
@@ -28,19 +28,28 @@ public class BrownLomicki {
      * @param productList lista produktow
      */
     public BrownLomicki(List<Product> productList) {
+        if (productList.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
         this.productList = productList;
-        numberOfMachine = productList.get(0).timeInMachines.length;
+        numberOfMachine = productList.get(0).getTimeInMachines().length;
         numberOfProduct = productList.size();
-        precedingCostTime = new double[numberOfMachine];
+        precedingCostTime = new int[numberOfMachine];
         for (int i = 0; i < numberOfMachine; i++) {
             precedingCostTime[i] = 0;
         }
+
         optimalOrder = new ArrayList<>();
     }
 
-    public double calculateCost() {
-        List<Double> W;
-        List<double[]> beginG = null;
+    /**
+     *
+     * @return koszt czasowy wykonania wszystkich wyrobów
+     */
+    public int calculateCost() {
+        List<Integer> W;
+        List<int[]> beginG = null;
+        int result;
         int index = 0;
         // 1 obrot na kazdy produkt
         for (int j = 0; j < numberOfProduct; j++) {
@@ -56,80 +65,104 @@ public class BrownLomicki {
             precedingCostTime = beginG.get(index);
             productList.remove(index);
         }
-        //System.out.println(optimalOrder);
-        return beginG.get(index)[numberOfMachine - 1];
-    }
-
-    private Product addPeriodWorks(Product w, double[] konce) {
-        List<Period> periods = new ArrayList();
-        Period period;
-        for (int i = 0; i < numberOfMachine; i++) {
-            period = new Period(konce[i] - w.timeInMachines[i], konce[i]);
-            periods.add(period);
-        }
-        w.setPeriodWorks(periods);
-        return w;
-    }
-
-    private double calculateProfitabelityOfProduct(int numerWyrobu, double[] gPocz) {
-        double result = 0;
-
-        List<Double> listaG = new ArrayList<>();
-        double g;
-        //i kolumna
-        for (int i = 0; i < numberOfMachine; i++) {
-            g = gPocz[i];
-            //reszta z wiersza
-            for (int j = 0; j < productList.size(); j++) {
-                if (numerWyrobu != j) {
-                    g += productList.get(j).getTimeInMachines()[i];
-                }
-            }
-            g += calculateRemainingCosts(numerWyrobu, i);
-            listaG.add(g);
-        }
-        result = Collections.max(listaG);
+        result = beginG.get(index)[numberOfMachine - 1];
         return result;
     }
 
-    private double calculateRemainingCosts(int numerWyrobu, int numerMaszyny) {
-        double wynik = 0, nextElement = 0;
-        List<Double> lista = new ArrayList<>();
-        double[] machines;
-        for (int i = 0; i < productList.size(); i++) {
-            nextElement = 0;
-            if (numerWyrobu != i) {
-                machines = productList.get(i).getTimeInMachines();
-                for (int j = numerMaszyny + 1; j < machines.length; j++) {
-                    nextElement += machines[j];
-                }
-                lista.add(nextElement);
-            }
+    /**
+     *
+     * @param product produkt
+     * @param endOperation koniec operacji
+     * @return produkt z okresami pracy
+     */
+    private Product addPeriodWorks(Product product, int[] endOperation) {
+        List<Period> periods = new ArrayList();
+        Period period;
+        for (int i = 0; i < numberOfMachine; i++) {
+            period = new Period(endOperation[i] - product.getTimeInMachines()[i], endOperation[i]);
+            periods.add(period);
         }
-        if (!lista.isEmpty()) {
-            wynik = Collections.min(lista);
-        }
-        return wynik;
+        product.setPeriodWorks(periods);
+        return product;
     }
 
-    private List<double[]> calculateBeginG() {
-        List<double[]> lista = new ArrayList<>();
-        double[] maszyny;
-        double[] g;
-        for (int i = 0; i < productList.size(); i++) {
-            maszyny = productList.get(i).getTimeInMachines();
-            g = new double[numberOfMachine];
-            g[0] = precedingCostTime[0] + maszyny[0];
-            for (int j = 1; j < numberOfMachine; j++) {
-                if (g[j - 1] > precedingCostTime[j]) {
-                    g[j] = g[j - 1] + maszyny[j];
-                } else {
-                    g[j] = precedingCostTime[j] + maszyny[j];
+    /**
+     *
+     * @param numberOfProduct numer produktu
+     * @param gStart poczatkowe wartosci g
+     * @return wspóczynnik produktu
+     */
+    private int calculateProfitabelityOfProduct(int numberOfProduct, int[] gStart) {
+        int result;
+        List<Integer> listOfG = new ArrayList<>();
+        int g;
+        //i kolumna
+        for (int i = 0; i < numberOfMachine; i++) {
+            g = gStart[i];
+            //reszta z wiersza
+            for (int j = 0; j < productList.size(); j++) {
+                if (numberOfProduct != j) {
+                    g += productList.get(j).getTimeInMachines()[i];
                 }
             }
-            lista.add(g);
+            g += calculateRemainingCosts(numberOfProduct, i);
+            listOfG.add(g);
         }
-        return lista;
+        result = Collections.max(listOfG);
+        return result;
+    }
+
+    /**
+     *
+     * @param numberOfProduct numer produktu
+     * @param numberOfMachine numer maszyny
+     * @return minimalny pozostaly koszty
+     */
+    private int calculateRemainingCosts(int numberOfProduct, int numberOfMachine) {
+        int result = 0;
+        int nextElement;
+        List<Integer> listOfRemaingCost = new ArrayList<>();
+        int[] machines;
+        for (int i = 0; i < productList.size(); i++) {
+            nextElement = 0;
+            if (numberOfProduct != i) {
+                machines = productList.get(i).getTimeInMachines();
+                for (int j = numberOfMachine + 1; j < machines.length; j++) {
+                    nextElement += machines[j];
+                }
+                listOfRemaingCost.add(nextElement);
+            }
+        }
+        //wybieramy minimalny
+        if (!listOfRemaingCost.isEmpty()) {
+            result = Collections.min(listOfRemaingCost);
+        }
+        return result;
+    }
+
+    /**
+     * Liczy poczatkowe koszty czasowe(czasy poprzednich operacji i bierzacej)
+     *
+     * @return liste poczatkow
+     */
+    private List<int[]> calculateBeginG() {
+        List<int[]> listOfG = new ArrayList<>();
+        int[] machines;
+        int[] g;
+        for (int i = 0; i < productList.size(); i++) {
+            machines = productList.get(i).getTimeInMachines();
+            g = new int[numberOfMachine];
+            g[0] = precedingCostTime[0] + machines[0];
+            for (int j = 1; j < numberOfMachine; j++) {
+                if (g[j - 1] > precedingCostTime[j]) {
+                    g[j] = g[j - 1] + machines[j];
+                } else {
+                    g[j] = precedingCostTime[j] + machines[j];
+                }
+            }
+            listOfG.add(g);
+        }
+        return listOfG;
     }
 
     public int getNumberOfMachine() {
@@ -139,4 +172,9 @@ public class BrownLomicki {
     public int getNumberOfProduct() {
         return numberOfProduct;
     }
+
+    public List<Product> getOptimalOrder() {
+        return optimalOrder;
+    }
+
 }

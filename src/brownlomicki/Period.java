@@ -10,28 +10,30 @@ package brownlomicki;
  * @author user
  */
 public class Period {
-    double start;
-    double end;
+    int start;
+    int end;
 
-    public Period(double start, double end) {
+    public Period(int start, int end) {
         this.start = start;
         this.end = end;
     }
 
-    public double getStart() {
+    public int getStart() {
         return start;
     }
 
-    public void setStart(double start) {
+    public void setStart(int start) {
         this.start = start;
     }
 
-    public double getEnd() {
+    public int getEnd() {
         return end;
     }
 
-    public void setEnd(double end) {
+    public void setEnd(int end) {
         this.end = end;
     }
+
+    
     
 }
