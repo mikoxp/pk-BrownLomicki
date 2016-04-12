@@ -5,6 +5,9 @@
  */
 package gui;
 
+import brownlomicki.BrownLomicki;
+import brownlomicki.Period;
+import brownlomicki.Product;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,7 @@ public class MainGui extends javax.swing.JFrame {
     private final DefaultTableModel tableModel;
     private List<String> titleList;
     private String logText;
+    private List<Product> listOfProduct;
 
     public MainGui() {
         initComponents();
@@ -51,12 +55,12 @@ public class MainGui extends javax.swing.JFrame {
         removeMachine = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         dataTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        calcButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         logField = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         clearButton = new javax.swing.JButton();
-        titleBox = new javax.swing.JComboBox<>();
+        titleBox = new javax.swing.JComboBox<String>();
         textTitle = new javax.swing.JTextField();
         changeTitle = new javax.swing.JButton();
         openFile = new javax.swing.JButton();
@@ -107,10 +111,10 @@ public class MainGui extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(dataTable);
 
-        jButton1.setText("Calculate");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        calcButton.setText("Calculate");
+        calcButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                calcButtonActionPerformed(evt);
             }
         });
 
@@ -176,7 +180,7 @@ public class MainGui extends javax.swing.JFrame {
                         .addGap(38, 38, 38)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(addMachine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(removeMachine, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))
+                            .addComponent(removeMachine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(19, 19, 19))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(openFile)
@@ -186,7 +190,7 @@ public class MainGui extends javax.swing.JFrame {
                         .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(15, 15, 15))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(calcButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(20, 20, 20))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
@@ -207,7 +211,7 @@ public class MainGui extends javax.swing.JFrame {
                             .addComponent(removeMachine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(calcButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
@@ -260,14 +264,18 @@ public class MainGui extends javax.swing.JFrame {
         tableModel.setColumnCount(numberOfTableColumn);
         titleList.add(titleList.size() + 1 + "");
         tableModel.setColumnIdentifiers(titleList.toArray());
-        fillTable();
+        for (int i = 0; i < numberOfTableRows; i++) {
+            tableModel.setValueAt(0, i, numberOfTableColumn - 1);
+        }
         fillTitleBox();
     }//GEN-LAST:event_addProductActionPerformed
 
     private void addMachineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMachineActionPerformed
         numberOfTableRows++;
         tableModel.setRowCount(numberOfTableRows);
-        fillTable();
+        for (int i = 0; i < numberOfTableColumn; i++) {
+            tableModel.setValueAt(0, numberOfTableRows - 1, i);
+        }
     }//GEN-LAST:event_addMachineActionPerformed
 
     private void removeProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeProductActionPerformed
@@ -286,14 +294,63 @@ public class MainGui extends javax.swing.JFrame {
             tableModel.setRowCount(numberOfTableRows);
         }
     }//GEN-LAST:event_removeMachineActionPerformed
+    private List<Product> loadingDataFromTabele() throws Exception {
+        List<Product> l = new ArrayList<>();
+        Product product;
+        String help;
+        int[] timeInMachines;
+        for (int i = 0; i < numberOfTableColumn; i++) {
+            timeInMachines = new int[numberOfTableRows];
+            for (int j = 0; j < numberOfTableRows; j++) {
+                help = (String) tableModel.getValueAt(j, i);
+                timeInMachines[j] = Integer.parseInt(help);
+                if (timeInMachines[j] < 0) {
+                    throw new IllegalAccessException();
+                }
+            }
+            product = new Product(titleList.get(i), i, timeInMachines);
+            l.add(product);
+        }
+        return l;
+    }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void writeOptimalOrder(List<Product> listOfOptimalProducts) {
+        logText += "\nOptimal Order:\n";
+        int i = 1;
+        for (Product product : listOfOptimalProducts) {
+            logText += " Number in Order: " + i + "\n";
+            i++;
+            logText += " Number id:" + product.getNumber() + "\n";
+            logText += " Name id: " + product.getIdName() + "\n";
+            logText += " *Machines works periods*\n";
+            for (Period period : product.getPeriodWorks()) {
+                logText += " " + period.toString() + "\n";
+            }
+            logText += "-------------------\n";
+        }
+    }
+    private void calcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcButtonActionPerformed
+
+        try {
+            listOfProduct = loadingDataFromTabele();
+            BrownLomicki brownLomicki = new BrownLomicki(listOfProduct);
+            int totalCost = brownLomicki.calculateCost();
+            logText += "****START ALGORITHM***\n";
+            logText += "Number of Product: " + numberOfTableColumn + "\n";
+            logText += "Number of Machines: " + numberOfTableRows + "\n";
+            writeOptimalOrder(brownLomicki.getOptimalOrder());
+            logText += "Total Time Cost: " + totalCost + "\n";
+            logField.setText(logText);
+        } catch (Exception e) {
+            logText += "WRONG DATA !!!!!\n";
+            logField.setText(logText);
+        }
+
+    }//GEN-LAST:event_calcButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
-       logText="";
-       logField.setText(logText);
+        logText = "";
+        logField.setText(logText);
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void titleBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleBoxActionPerformed
@@ -312,40 +369,41 @@ public class MainGui extends javax.swing.JFrame {
     private void loadingData(File file) {
         int c, r;
         List<Integer> listOfData = new ArrayList<>();
-        List<String> title=new ArrayList<>();
+        List<String> title = new ArrayList<>();
         try {
             Scanner in = new Scanner(file);
             in.hasNext();
             c = in.nextInt();
             r = in.nextInt();
-            if(in.nextInt()==1){
+            if (in.nextInt() == 1) {
                 in.nextLine();
-                for(int i=0;i<c;i++){
+                for (int i = 0; i < c; i++) {
                     title.add(in.nextLine());
                 }
             }
             while (in.hasNext()) {
                 listOfData.add(in.nextInt());
             }
-            if(c*r!=listOfData.size()){
+            if (c * r != listOfData.size()) {
                 throw new Exception();
             }
-            numberOfTableColumn=c;
-            numberOfTableRows=r;
+            numberOfTableColumn = c;
+            numberOfTableRows = r;
             tableModel.setColumnCount(numberOfTableColumn);
             tableModel.setRowCount(numberOfTableRows);
-            for(int i=0;i<numberOfTableColumn;i++){
-                for(int j=0;j<numberOfTableRows;j++){
-                    tableModel.setValueAt(listOfData.get(0),j, i);
+            for (int i = 0; i < numberOfTableColumn; i++) {
+                for (int j = 0; j < numberOfTableRows; j++) {
+                    tableModel.setValueAt("" + listOfData.get(0), j, i);
                     listOfData.remove(0);
                 }
             }
-            titleList=title;
+            titleList = title;
             tableModel.setColumnIdentifiers(titleList.toArray());
+            fillTitleBox();
             logText += "Load Success\n";
         } catch (Exception e) {
             logText += "Load failed\n";
-            
+
         }
         logField.setText(logText);
     }
@@ -397,10 +455,10 @@ public class MainGui extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addMachine;
     private javax.swing.JButton addProduct;
+    private javax.swing.JButton calcButton;
     private javax.swing.JButton changeTitle;
     private javax.swing.JButton clearButton;
     private javax.swing.JTable dataTable;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
