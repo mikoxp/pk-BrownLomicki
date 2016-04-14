@@ -258,7 +258,7 @@ public class MainGui extends javax.swing.JFrame {
     private void fillTable() {
         for (int i = 0; i < numberOfTableColumn; i++) {
             for (int j = 0; j < numberOfTableRows; j++) {
-                tableModel.setValueAt(0, j, i);
+                tableModel.setValueAt(""+0, j, i);
             }
         }
 
@@ -269,7 +269,7 @@ public class MainGui extends javax.swing.JFrame {
         titleList.add(titleList.size() + 1 + "");
         tableModel.setColumnIdentifiers(titleList.toArray());
         for (int i = 0; i < numberOfTableRows; i++) {
-            tableModel.setValueAt(0, i, numberOfTableColumn - 1);
+            tableModel.setValueAt(""+0, i, numberOfTableColumn - 1);
         }
         fillTitleBox();
     }//GEN-LAST:event_addProductActionPerformed
@@ -278,7 +278,7 @@ public class MainGui extends javax.swing.JFrame {
         numberOfTableRows++;
         tableModel.setRowCount(numberOfTableRows);
         for (int i = 0; i < numberOfTableColumn; i++) {
-            tableModel.setValueAt(0, numberOfTableRows - 1, i);
+            tableModel.setValueAt(""+0, numberOfTableRows - 1, i);
         }
     }//GEN-LAST:event_addMachineActionPerformed
 

@@ -41,8 +41,8 @@ public class GanttDiagram extends ApplicationFrame {
 //        ChartUtilities.saveChartAsPNG(file, chart,500,500);
 //        }catch(Exception e){}
     }
-
-    private static Date date(final int point) {
+    
+    private static Date createTimePoint(final int point) {
 
         final Calendar calendar = Calendar.getInstance();
         calendar.set(0, 0, 0, 0, 0, point);
@@ -55,12 +55,12 @@ public class GanttDiagram extends ApplicationFrame {
         TaskSeries taskSeries; 
         
         for(Product p:listOfProduct){
-            taskSeries= new TaskSeries(p.getIdName()+"("+p.getNumber()+1+")");
+            taskSeries= new TaskSeries(p.getIdName()+"("+(p.getNumber()+1)+")");
             int i=0;
             for(Period period:p.getPeriodWorks()){
                 taskSeries.add(new Task("Machine "+i,
-                        date(period.getStart()),
-                        date(period.getEnd()))); 
+                        createTimePoint(period.getStart()),
+                        createTimePoint(period.getEnd()))); 
                 i++;
             }
             collection.add(taskSeries);
