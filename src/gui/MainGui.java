@@ -8,11 +8,13 @@ package gui;
 import brownlomicki.BrownLomicki;
 import brownlomicki.Period;
 import brownlomicki.Product;
+import brownlomicki.htmlRaport.HtmlRaportCreator;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.ui.RefineryUtilities;
 
@@ -28,8 +30,8 @@ public class MainGui extends javax.swing.JFrame {
     private List<String> titleList;
     private String logText;
     private List<Product> listOfProduct;
-    private GanttDiagram ganttDiagram;
     private BrownLomicki brownLomicki;
+    private GanttDiagram ganttDiagram;
 
     public MainGui() {
         initComponents();
@@ -41,6 +43,7 @@ public class MainGui extends javax.swing.JFrame {
         initTitleList();
         fillTable();
         fillTitleBox();
+        saveButton.setEnabled(false);
 
     }
 
@@ -68,6 +71,7 @@ public class MainGui extends javax.swing.JFrame {
         textTitle = new javax.swing.JTextField();
         changeTitle = new javax.swing.JButton();
         openFile = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -156,6 +160,13 @@ public class MainGui extends javax.swing.JFrame {
             }
         });
 
+        saveButton.setText("Generate Raport");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -180,7 +191,7 @@ public class MainGui extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(addProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(removeProduct, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
+                            .addComponent(removeProduct, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
                         .addGap(38, 38, 38)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(addMachine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -191,13 +202,15 @@ public class MainGui extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(15, 15, 15))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(calcButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(20, 20, 20))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1))
                         .addGap(15, 15, 15))))
         );
         layout.setVerticalGroup(
@@ -234,7 +247,8 @@ public class MainGui extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clearButton)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(saveButton))
                 .addContainerGap())
         );
 
@@ -258,7 +272,7 @@ public class MainGui extends javax.swing.JFrame {
     private void fillTable() {
         for (int i = 0; i < numberOfTableColumn; i++) {
             for (int j = 0; j < numberOfTableRows; j++) {
-                tableModel.setValueAt(""+0, j, i);
+                tableModel.setValueAt("" + 0, j, i);
             }
         }
 
@@ -269,7 +283,7 @@ public class MainGui extends javax.swing.JFrame {
         titleList.add(titleList.size() + 1 + "");
         tableModel.setColumnIdentifiers(titleList.toArray());
         for (int i = 0; i < numberOfTableRows; i++) {
-            tableModel.setValueAt(""+0, i, numberOfTableColumn - 1);
+            tableModel.setValueAt("" + 0, i, numberOfTableColumn - 1);
         }
         fillTitleBox();
     }//GEN-LAST:event_addProductActionPerformed
@@ -278,7 +292,7 @@ public class MainGui extends javax.swing.JFrame {
         numberOfTableRows++;
         tableModel.setRowCount(numberOfTableRows);
         for (int i = 0; i < numberOfTableColumn; i++) {
-            tableModel.setValueAt(""+0, numberOfTableRows - 1, i);
+            tableModel.setValueAt("" + 0, numberOfTableRows - 1, i);
         }
     }//GEN-LAST:event_addMachineActionPerformed
 
@@ -334,7 +348,10 @@ public class MainGui extends javax.swing.JFrame {
         }
     }
     private void calcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcButtonActionPerformed
-
+        if (ganttDiagram != null) {
+            ganttDiagram.setVisible(false);
+            ganttDiagram = null;
+        }
         try {
             listOfProduct = loadingDataFromTabele();
             brownLomicki = new BrownLomicki(listOfProduct);
@@ -344,12 +361,16 @@ public class MainGui extends javax.swing.JFrame {
             logText += "Number of Machines: " + numberOfTableRows + "\n";
             writeOptimalOrder(brownLomicki.getOptimalOrder());
             logText += "Total Time Cost: " + totalCost + "\n";
-            ganttDiagram = new GanttDiagram("Gantt Diagram", brownLomicki.getOptimalOrder());
-            RefineryUtilities.centerFrameOnScreen(ganttDiagram);
-            ganttDiagram.setVisible(true);
+            if (totalCost > 0) {
+                ganttDiagram = new GanttDiagram("Gantt Diagram", brownLomicki.getOptimalOrder());
+                RefineryUtilities.centerFrameOnScreen(ganttDiagram);
+                ganttDiagram.setVisible(true);
+                saveButton.setEnabled(true);
+            }
             logField.setText(logText);
         } catch (Exception e) {
-            brownLomicki=null;
+            brownLomicki = null;
+            saveButton.setEnabled(false);
             logText += "WRONG DATA !!!!!\n";
             logField.setText(logText);
         }
@@ -426,6 +447,25 @@ public class MainGui extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_openFileActionPerformed
 
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        if (brownLomicki == null) {
+            return;
+        }
+        HtmlRaportCreator htmlRaportCreator = new HtmlRaportCreator(brownLomicki);
+        JFileChooser fc = new JFileChooser();
+        File folder;
+        fc.setDialogTitle("Choose Place");
+        if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            if (htmlRaportCreator.createRaport(fc.getSelectedFile().getPath())) {
+                logText += "CREATE RAPORT\n";
+            } else {
+                logText += "DONT CREATE RAPORT\n";
+            }
+            logField.setText(logText);
+        }
+
+    }//GEN-LAST:event_saveButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -475,6 +515,7 @@ public class MainGui extends javax.swing.JFrame {
     private javax.swing.JButton openFile;
     private javax.swing.JButton removeMachine;
     private javax.swing.JButton removeProduct;
+    private javax.swing.JButton saveButton;
     private javax.swing.JTextField textTitle;
     private javax.swing.JComboBox<String> titleBox;
     // End of variables declaration//GEN-END:variables

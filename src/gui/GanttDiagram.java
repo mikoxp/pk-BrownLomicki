@@ -2,12 +2,14 @@ package gui;
 
 import brownlomicki.Period;
 import brownlomicki.Product;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartRenderingInfo;
@@ -31,6 +33,7 @@ public class GanttDiagram extends ApplicationFrame {
         final ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         setContentPane(chartPanel);
+        setDefaultCloseOperation(ApplicationFrame.DO_NOTHING_ON_CLOSE);
         pack();
 //        ChartRenderingInfo info=new ChartRenderingInfo(new StandardEntityCollection());
 //        File file =new File("raport/test.png");
@@ -56,7 +59,7 @@ public class GanttDiagram extends ApplicationFrame {
         
         for(Product p:listOfProduct){
             taskSeries= new TaskSeries(p.getIdName()+"("+(p.getNumber()+1)+")");
-            int i=0;
+            int i=1;
             for(Period period:p.getPeriodWorks()){
                 taskSeries.add(new Task("Machine "+i,
                         createTimePoint(period.getStart()),
@@ -71,7 +74,7 @@ public class GanttDiagram extends ApplicationFrame {
 
     private JFreeChart createChart(final IntervalCategoryDataset dataset) {
         final JFreeChart chart = ChartFactory.createGanttChart(
-                "Gantt Chart", // chart title
+                "", // chart title
                 "Machines", // domain axis label
                 "Times", // range axis label
                 dataset, // data
@@ -84,4 +87,5 @@ public class GanttDiagram extends ApplicationFrame {
 //      chart.getCategoryPlot().getDomainAxis().setMaxCategoryLabelWidthRatio(10.0f);
         return chart;
     }
+    
 }
