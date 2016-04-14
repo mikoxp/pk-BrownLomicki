@@ -7,8 +7,10 @@
 
 import brownlomicki.BrownLomicki;
 import brownlomicki.Product;
+import gui.GanttDiagram;
 import gui.MainGui;
 import java.util.List;
+import org.jfree.ui.RefineryUtilities;
 
 /**
  *
@@ -23,6 +25,10 @@ public class Run {
 //        double koszt=bl.calculateCost();
 //        System.out.println("K "+koszt);
         MainGui m=new MainGui();
-        m.setVisible(true);
+       m.setVisible(true);
+       //GanttDiagram gant=new GanttDiagram("cos",null);
+        //gant.pack();
+       //RefineryUtilities.centerFrameOnScreen(gant);
+        //gant.setVisible(true);
     }
 }

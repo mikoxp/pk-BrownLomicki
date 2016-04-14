@@ -33,6 +33,10 @@ public class Product {
     public int getNumber() {
         return number;
     }
+
+    public String getIdName() {
+        return idName;
+    }
     
     public int[] getTimeInMachines() {
         return timeInMachines;
@@ -50,4 +54,16 @@ public class Product {
         this.periodWorks = periodWorks;
     }
 
+    @Override
+    public String toString() {
+        String s="";
+        s+="Machine Number: "+number+"\n";
+        s+="Machine Name: "+idName+"\n";
+        s+="Work Periods:\n";
+        for(Period p:periodWorks){
+            s+=" "+p.toString()+"\n";
+        }
+        return s;
+    }
+    
 }

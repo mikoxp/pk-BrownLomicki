@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.ui.RefineryUtilities;
 
 /**
  *
@@ -27,6 +28,8 @@ public class MainGui extends javax.swing.JFrame {
     private List<String> titleList;
     private String logText;
     private List<Product> listOfProduct;
+    private GanttDiagram ganttDiagram;
+    private BrownLomicki brownLomicki;
 
     public MainGui() {
         initComponents();
@@ -38,6 +41,7 @@ public class MainGui extends javax.swing.JFrame {
         initTitleList();
         fillTable();
         fillTitleBox();
+
     }
 
     /**
@@ -60,7 +64,7 @@ public class MainGui extends javax.swing.JFrame {
         logField = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         clearButton = new javax.swing.JButton();
-        titleBox = new javax.swing.JComboBox<String>();
+        titleBox = new javax.swing.JComboBox<>();
         textTitle = new javax.swing.JTextField();
         changeTitle = new javax.swing.JButton();
         openFile = new javax.swing.JButton();
@@ -333,18 +337,23 @@ public class MainGui extends javax.swing.JFrame {
 
         try {
             listOfProduct = loadingDataFromTabele();
-            BrownLomicki brownLomicki = new BrownLomicki(listOfProduct);
+            brownLomicki = new BrownLomicki(listOfProduct);
             int totalCost = brownLomicki.calculateCost();
             logText += "****START ALGORITHM***\n";
             logText += "Number of Product: " + numberOfTableColumn + "\n";
             logText += "Number of Machines: " + numberOfTableRows + "\n";
             writeOptimalOrder(brownLomicki.getOptimalOrder());
             logText += "Total Time Cost: " + totalCost + "\n";
+            ganttDiagram = new GanttDiagram("Gantt Diagram", brownLomicki.getOptimalOrder());
+            RefineryUtilities.centerFrameOnScreen(ganttDiagram);
+            ganttDiagram.setVisible(true);
             logField.setText(logText);
         } catch (Exception e) {
+            brownLomicki=null;
             logText += "WRONG DATA !!!!!\n";
             logField.setText(logText);
         }
+
 
     }//GEN-LAST:event_calcButtonActionPerformed
 
