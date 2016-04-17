@@ -8,6 +8,7 @@ package brownlomicki.htmlRaport;
 import brownlomicki.BrownLomicki;
 import brownlomicki.Period;
 import brownlomicki.Product;
+import gui.GanttDiagram;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import java.util.Date;
 public class HtmlRaportCreator {
 
     private final BrownLomicki brownLomicki;
+    private GanttDiagram ganttDiagram;
     private PrintWriter printWriter;
     String stringSchema1="<p>%s</p>\n";
     String stringSchema2="<h3>%s</h2>\n";
@@ -31,8 +33,11 @@ public class HtmlRaportCreator {
     public boolean createRaport(String folderName) {
         File folder = new File(folderName);
         File file = new File(folder + "/index.html");
+        ganttDiagram=new GanttDiagram("",brownLomicki.getOptimalOrder());
+       
         try {
             folder.mkdir();
+             ganttDiagram.saveGanttDiagramToFile(folder+"/gantt_diagram.png");
             printWriter = new PrintWriter(file);
             writing();
             printWriter.close();
@@ -76,6 +81,7 @@ public class HtmlRaportCreator {
         writeStartOrder();
         writeSizeWork();
         writeOptimalOrder();
+        printWriter.printf("<img src=\"gantt_diagram.png\">\n");
         printWriter.printf(htmlEnd);
     }
 }

@@ -2,14 +2,10 @@ package gui;
 
 import brownlomicki.Period;
 import brownlomicki.Product;
-import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartRenderingInfo;
@@ -35,16 +31,16 @@ public class GanttDiagram extends ApplicationFrame {
         setContentPane(chartPanel);
         setDefaultCloseOperation(ApplicationFrame.DO_NOTHING_ON_CLOSE);
         pack();
-//        ChartRenderingInfo info=new ChartRenderingInfo(new StandardEntityCollection());
-//        File file =new File("raport/test.png");
-//        File theDir = new File("raport");
-//        
-//        try{
-//            theDir.mkdir();
-//        ChartUtilities.saveChartAsPNG(file, chart,500,500);
-//        }catch(Exception e){}
+        
     }
-    
+    public void saveGanttDiagramToFile(String filePath){
+        ChartRenderingInfo info=new ChartRenderingInfo(new StandardEntityCollection());
+        File file =new File(filePath);
+               
+        try{
+        ChartUtilities.saveChartAsPNG(file, chart,1000,540);
+        }catch(Exception e){}
+    }
     private static Date createTimePoint(final int point) {
 
         final Calendar calendar = Calendar.getInstance();
