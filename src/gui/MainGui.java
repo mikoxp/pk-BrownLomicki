@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.ui.RefineryUtilities;
 

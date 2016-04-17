@@ -19,9 +19,10 @@ public class BrownLomicki {
     private final int numberOfMachine; //ilosc maszyn
     private final int numberOfProduct;
     private final List<Product> productList;
-
+    private List<Product> startList;
     private int[] precedingCostTime; //poprzedzajacy
     private final List<Product> optimalOrder;
+    private int totalCost;
 
     /**
      *
@@ -40,6 +41,11 @@ public class BrownLomicki {
         }
 
         optimalOrder = new ArrayList<>();
+        startList=new ArrayList();
+        for(Product p:productList){
+            startList.add(p);
+        }
+        totalCost=0;
     }
 
     /**
@@ -66,6 +72,7 @@ public class BrownLomicki {
             productList.remove(index);
         }
         result = beginG.get(index)[numberOfMachine - 1];
+        totalCost=result;
         return result;
     }
 
@@ -175,6 +182,14 @@ public class BrownLomicki {
 
     public List<Product> getOptimalOrder() {
         return optimalOrder;
+    }
+
+    public List<Product> getStartList() {
+        return startList;
+    }
+
+    public int getTotalCost() {
+        return totalCost;
     }
 
 }
