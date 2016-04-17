@@ -41,6 +41,7 @@ public class HtmlRaportCreator {
         String htmlBegin = "<html>\n<head>\n <title>%s</title>\n</head>\n<body>";
         String htmlEnd = "</body>\n</html>";
         printWriter.printf(htmlBegin, new Date().toString());
+        
         printWriter.printf(htmlEnd);
     }
 }
