@@ -7,7 +7,7 @@ package brownlomicki;
 
 /**
  *
- * @author user
+ * @author Michał Oleś
  */
 public class Period {
     int start;

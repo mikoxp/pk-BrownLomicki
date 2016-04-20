@@ -19,7 +19,7 @@ import java.util.Date;
 
 /**
  *
- * @author user
+ * @author Michał Oleś
  */
 public class HtmlRaportCreator {
 
@@ -33,6 +33,11 @@ public class HtmlRaportCreator {
         this.brownLomicki = brownLomicki;
     }
 
+    /**
+     *
+     * @param folderName nazwa folderu
+     * @return czy się udało
+     */
     public boolean createRaport(String folderName) {
         File folder = new File(folderName);
         File file = new File(folder + "/index.html");
@@ -41,7 +46,7 @@ public class HtmlRaportCreator {
         try {
             folder.mkdir();
             ganttDiagram.saveGanttDiagramToFile(folder + "/gantt_diagram.png");
-            printWriter = new PrintWriter(file,"UTF-8");
+            printWriter = new PrintWriter(file, "UTF-8");
             writing();
             printWriter.close();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
@@ -51,17 +56,16 @@ public class HtmlRaportCreator {
 
             String htmlFilePath = folder + "/index.html"; // path to your new file
             File htmlFile = new File(htmlFilePath);
-
-// open the default web browser for the HTML page
             Desktop.getDesktop().browse(htmlFile.toURI());
-
-// if a web browser is the default HTML handler, this might work too
             Desktop.getDesktop().open(htmlFile);
         } catch (Exception e) {
         }
         return true;
     }
 
+    /**
+     * wpisywanie danych poczatkowych
+     */
     private void writeStartOrder() {
         printWriter.println("<h1>Input data</h1>");
         printWriter.println("<h2>Time working on machines<h2>");
@@ -71,6 +75,9 @@ public class HtmlRaportCreator {
         }
     }
 
+    /**
+     * wpisywanie danych o rozmiarze zadania
+     */
     private void writeSizeWork() {
         printWriter.println("<h1>Task Size</h1>");
         printWriter.printf(stringSchema1, "Number of Product: " + brownLomicki.getNumberOfProduct());
@@ -78,6 +85,9 @@ public class HtmlRaportCreator {
 
     }
 
+    /**
+     * wpisywanie optymalnej kolejniosci
+     */
     private void writeOptimalOrder() {
         int i;
         printWriter.println("<h1><b>Optimal Order and works periods</b></h1>");
@@ -93,8 +103,11 @@ public class HtmlRaportCreator {
 
     }
 
+    /**
+     * tworzenie htmla
+     */
     private void writing() {
-       String htmlBegin = "<html>\n<head>\n <title>%s</title>\n<meta charset=\"UTF-8\">\n</head>\n<body>";
+        String htmlBegin = "<html>\n<head>\n <title>%s</title>\n<meta charset=\"UTF-8\">\n</head>\n<body>";
         String htmlEnd = "</body>\n</html>";
         printWriter.printf(htmlBegin, new Date().toString());
         writeStartOrder();
