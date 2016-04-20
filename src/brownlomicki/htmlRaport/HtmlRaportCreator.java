@@ -11,7 +11,9 @@ import brownlomicki.Product;
 import gui.GanttDiagram;
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -39,10 +41,10 @@ public class HtmlRaportCreator {
         try {
             folder.mkdir();
             ganttDiagram.saveGanttDiagramToFile(folder + "/gantt_diagram.png");
-            printWriter = new PrintWriter(file);
+            printWriter = new PrintWriter(file,"UTF-8");
             writing();
             printWriter.close();
-        } catch (Exception e) {
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
             return false;
         }
         try {
@@ -61,8 +63,8 @@ public class HtmlRaportCreator {
     }
 
     private void writeStartOrder() {
-        printWriter.println("<h1>Dane wejściowe</h1>");
-        printWriter.println("<h2>Czasy pracy na maszynach<h2>");
+        printWriter.println("<h1>Input data</h1>");
+        printWriter.println("<h2>Time working on machines<h2>");
         for (Product p : brownLomicki.getStartList()) {
             printWriter.printf(stringSchema2, p.getIdName());
             printWriter.printf(stringSchema1, Arrays.toString(p.getTimeInMachines()));
@@ -70,24 +72,24 @@ public class HtmlRaportCreator {
     }
 
     private void writeSizeWork() {
-        printWriter.println("<h1>Rozmiar zadania</h1>");
-        printWriter.printf(stringSchema1, "Liczba Produktów: " + brownLomicki.getNumberOfProduct());
-        printWriter.printf(stringSchema1, "Liczba Maszyn: " + brownLomicki.getNumberOfMachine());
+        printWriter.println("<h1>Task Size</h1>");
+        printWriter.printf(stringSchema1, "Number of Product: " + brownLomicki.getNumberOfProduct());
+        printWriter.printf(stringSchema1, "Number of Machines: " + brownLomicki.getNumberOfMachine());
 
     }
 
     private void writeOptimalOrder() {
         int i;
-        printWriter.println("<h1><b>Optymalna kolejność i okresy pracy na maszynach</b></h1>");
+        printWriter.println("<h1><b>Optimal Order and works periods</b></h1>");
         for (Product p : brownLomicki.getOptimalOrder()) {
-            printWriter.printf(stringSchema2, "Nazwa Produktu: " + p.getIdName());
+            printWriter.printf(stringSchema2, "Product Name: " + p.getIdName());
             i = 1;
             for (Period period : p.getPeriodWorks()) {
-                printWriter.printf(stringSchema1, "Maszyna " + i + ": " + period.toString());
+                printWriter.printf(stringSchema1, "Machine " + i + ": " + period.toString());
                 i++;
             }
         }
-        printWriter.printf(stringSchema2, "Całkowity czas wykonywania zestawu produktów: " + brownLomicki.getTotalCost());
+        printWriter.printf(stringSchema2, "Total time: " + brownLomicki.getTotalCost());
 
     }
 

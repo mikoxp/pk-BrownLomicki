@@ -66,7 +66,7 @@ public class MainGui extends javax.swing.JFrame {
         logField = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         clearButton = new javax.swing.JButton();
-        titleBox = new javax.swing.JComboBox<String>();
+        titleBox = new javax.swing.JComboBox<>();
         textTitle = new javax.swing.JTextField();
         changeTitle = new javax.swing.JButton();
         openFile = new javax.swing.JButton();
@@ -190,7 +190,7 @@ public class MainGui extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(addProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(removeProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 122, Short.MAX_VALUE))
+                            .addComponent(removeProduct, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
                         .addGap(38, 38, 38)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(addMachine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -401,7 +401,7 @@ public class MainGui extends javax.swing.JFrame {
         List<Integer> listOfData = new ArrayList<>();
         List<String> title = new ArrayList<>();
         try {
-            Scanner in = new Scanner(file);
+            Scanner in = new Scanner(file,"UTF-8");
             in.hasNext();
             c = in.nextInt();
             r = in.nextInt();

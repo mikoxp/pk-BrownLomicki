@@ -29,7 +29,7 @@ public class BrownLomicki {
      * @param productList lista produktow
      */
     public BrownLomicki(List<Product> productList) {
-        if (productList.isEmpty()) {
+        if (productList==null ||productList.isEmpty()) {
             throw new IllegalArgumentException();
         }
         this.productList = productList;
