@@ -441,6 +441,7 @@ public class MainGui extends javax.swing.JFrame {
         JFileChooser jFileChooser = new JFileChooser();
         if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             loadingData(jFileChooser.getSelectedFile());
+            saveButton.setEnabled(false);
         } else {
             logText += "Do not choose file\n";
             logField.setText(logText);
@@ -453,7 +454,6 @@ public class MainGui extends javax.swing.JFrame {
         }
         HtmlRaportCreator htmlRaportCreator = new HtmlRaportCreator(brownLomicki);
         JFileChooser fc = new JFileChooser();
-        File folder;
         fc.setDialogTitle("Choose Place");
         if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             if (htmlRaportCreator.createRaport(fc.getSelectedFile().getPath())) {
