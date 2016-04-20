@@ -66,7 +66,7 @@ public class MainGui extends javax.swing.JFrame {
         logField = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         clearButton = new javax.swing.JButton();
-        titleBox = new javax.swing.JComboBox<>();
+        titleBox = new javax.swing.JComboBox<String>();
         textTitle = new javax.swing.JTextField();
         changeTitle = new javax.swing.JButton();
         openFile = new javax.swing.JButton();
@@ -190,7 +190,7 @@ public class MainGui extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(addProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(removeProduct, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
+                            .addComponent(removeProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 122, Short.MAX_VALUE))
                         .addGap(38, 38, 38)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(addMachine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -206,9 +206,9 @@ public class MainGui extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+                                .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
-                                .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+                                .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(jScrollPane1))
                         .addGap(15, 15, 15))))
         );
@@ -361,6 +361,7 @@ public class MainGui extends javax.swing.JFrame {
             writeOptimalOrder(brownLomicki.getOptimalOrder());
             logText += "Total Time Cost: " + totalCost + "\n";
             if (totalCost > 0) {
+                new Thread().start();
                 ganttDiagram = new GanttDiagram("Gantt Diagram", brownLomicki.getOptimalOrder());
                 RefineryUtilities.centerFrameOnScreen(ganttDiagram);
                 ganttDiagram.setVisible(true);

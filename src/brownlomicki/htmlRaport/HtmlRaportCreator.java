@@ -8,9 +8,14 @@ package brownlomicki.htmlRaport;
 import brownlomicki.BrownLomicki;
 import brownlomicki.Period;
 import brownlomicki.Product;
+import com.sun.jndi.toolkit.url.UrlUtil;
 import gui.GanttDiagram;
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -23,8 +28,8 @@ public class HtmlRaportCreator {
     private final BrownLomicki brownLomicki;
     private GanttDiagram ganttDiagram;
     private PrintWriter printWriter;
-    String stringSchema1="<p>%s</p>\n";
-    String stringSchema2="<h3>%s</h2>\n";
+    String stringSchema1 = "<p>%s</p>\n";
+    String stringSchema2 = "<h3>%s</h2>\n";
 
     public HtmlRaportCreator(BrownLomicki brownLomicki) {
         this.brownLomicki = brownLomicki;
@@ -33,47 +38,63 @@ public class HtmlRaportCreator {
     public boolean createRaport(String folderName) {
         File folder = new File(folderName);
         File file = new File(folder + "/index.html");
-        ganttDiagram=new GanttDiagram("",brownLomicki.getOptimalOrder());
-       
+        ganttDiagram = new GanttDiagram("", brownLomicki.getOptimalOrder());
+
         try {
             folder.mkdir();
-             ganttDiagram.saveGanttDiagramToFile(folder+"/gantt_diagram.png");
+            ganttDiagram.saveGanttDiagramToFile(folder + "/gantt_diagram.png");
             printWriter = new PrintWriter(file);
             writing();
             printWriter.close();
         } catch (Exception e) {
             return false;
         }
+        try {
+
+            String htmlFilePath = folder + "/index.html"; // path to your new file
+            File htmlFile = new File(htmlFilePath);
+
+// open the default web browser for the HTML page
+            Desktop.getDesktop().browse(htmlFile.toURI());
+
+// if a web browser is the default HTML handler, this might work too
+            Desktop.getDesktop().open(htmlFile);
+        } catch (Exception e) {
+        }
         return true;
     }
-    private void writeStartOrder(){
+
+    private void writeStartOrder() {
         printWriter.println("<h1>Dane wejściowe</h1>");
         printWriter.println("<h2>Czasy pracy na maszynach<h2>");
-        for(Product p:brownLomicki.getStartList()){
-            printWriter.printf(stringSchema2,p.getIdName());
-            printWriter.printf(stringSchema1,Arrays.toString(p.getTimeInMachines()));
+        for (Product p : brownLomicki.getStartList()) {
+            printWriter.printf(stringSchema2, p.getIdName());
+            printWriter.printf(stringSchema1, Arrays.toString(p.getTimeInMachines()));
         }
     }
-    private void writeSizeWork(){
-         printWriter.println("<h1>Rozmiar zadania</h1>");
-         printWriter.printf(stringSchema1,"Liczba Produktów: "+brownLomicki.getNumberOfProduct());
-         printWriter.printf(stringSchema1,"Liczba Maszyn: "+brownLomicki.getNumberOfMachine());
-         
+
+    private void writeSizeWork() {
+        printWriter.println("<h1>Rozmiar zadania</h1>");
+        printWriter.printf(stringSchema1, "Liczba Produktów: " + brownLomicki.getNumberOfProduct());
+        printWriter.printf(stringSchema1, "Liczba Maszyn: " + brownLomicki.getNumberOfMachine());
+
     }
-    private  void writeOptimalOrder(){
+
+    private void writeOptimalOrder() {
         int i;
         printWriter.println("<h1><b>Optymalna kolejność i okresy pracy na maszynach</b></h1>");
-        for(Product p:brownLomicki.getOptimalOrder()){
-            printWriter.printf(stringSchema2,"Nazwa Produktu: "+p.getIdName());
-            i=1;
-            for(Period period:p.getPeriodWorks()){
-                printWriter.printf(stringSchema1,"Maszyna "+i+": "+period.toString());
+        for (Product p : brownLomicki.getOptimalOrder()) {
+            printWriter.printf(stringSchema2, "Nazwa Produktu: " + p.getIdName());
+            i = 1;
+            for (Period period : p.getPeriodWorks()) {
+                printWriter.printf(stringSchema1, "Maszyna " + i + ": " + period.toString());
                 i++;
             }
         }
-        printWriter.printf(stringSchema2, "Całkowity czas wykonywania zestawu produktów: "+brownLomicki.getTotalCost());
-        
+        printWriter.printf(stringSchema2, "Całkowity czas wykonywania zestawu produktów: " + brownLomicki.getTotalCost());
+
     }
+
     private void writing() {
         String htmlBegin = "<html>\n<head>\n <title>%s</title>\n<meta charset=\"UTF-8\">\n</head>\n<body>";
         String htmlEnd = "</body>\n</html>";
