@@ -8,14 +8,10 @@ package brownlomicki.htmlRaport;
 import brownlomicki.BrownLomicki;
 import brownlomicki.Period;
 import brownlomicki.Product;
-import com.sun.jndi.toolkit.url.UrlUtil;
 import gui.GanttDiagram;
 import java.awt.Desktop;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -96,7 +92,7 @@ public class HtmlRaportCreator {
     }
 
     private void writing() {
-        String htmlBegin = "<html>\n<head>\n <title>%s</title>\n<meta charset=\"UTF-8\">\n</head>\n<body>";
+       String htmlBegin = "<html>\n<head>\n <title>%s</title>\n<meta charset=\"UTF-8\">\n</head>\n<body>";
         String htmlEnd = "</body>\n</html>";
         printWriter.printf(htmlBegin, new Date().toString());
         writeStartOrder();
